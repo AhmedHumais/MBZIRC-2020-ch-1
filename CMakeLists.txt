@@ -16,6 +16,11 @@ find_package(catkin REQUIRED COMPONENTS
   mavros_msgs
 )
 
+find_package(ZED 2 QUIET)
+find_package(CUDA ${ZED_CUDA_VERSION} EXACT REQUIRED)
+find_package(OpenCV REQUIRED)
+
+
 ## System dependencies are found with CMake's conventions
 #find_package(Boost REQUIRED COMPONENTS system)
 
@@ -123,6 +128,15 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+include_directories(${ZED_INCLUDE_DIRS})
+include_directories(${CUDA_INCLUDE_DIRS})
+include_directories(${OPENCV_INCLUDE_DIRS})
+
+link_directories(${ZED_LIBRARY_DIR})
+link_directories(${CUDA_LIBRARY_DIRS})
+link_directories(/home/ahmed/darknet/build-release)
+link_directories(${OpenCV_LIBRARY_DIRS})
+
 ## Declare a C++ library
 #add_library(${PROJECT_NAME}
 #   src/pid.cpp
@@ -160,6 +174,14 @@ target_link_libraries(ardu_offb_thrust
 
 add_executable( bodytf src/static_tf_body.cpp)
 target_link_libraries(bodytf  ${catkin_LIBRARIES} )
+
+add_executable(zed_node src/zed_node.cpp)
+target_link_libraries(zed_node 
+                        ${catkin_LIBRARIES}
+                        ${ZED_LIBRARIES}
+                        ${OpenCV_LIBRARIES}
+                        libdark.so
+                        ${CUDA_LIBRARIES})
 
 #############
 ## Install ##
