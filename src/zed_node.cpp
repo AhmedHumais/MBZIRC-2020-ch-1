@@ -1,6 +1,7 @@
 #include <ros/ros.h>
 #include "zed_depth.hpp"
 #include <geometry_msgs/PoseStamped.h>
+#include <zedyolo_msgs/zed_raw.h>
 #include <signal.h>
 
 
@@ -19,6 +20,8 @@ int main(int argc, char **argv)
 
     ros::Publisher obj_pos_pub = nh.advertise<geometry_msgs::PoseStamped>
             ("zed/objpos", 10);
+    ros::Publisher bodyAndobj_pos_pub = nh.advertise<zedyolo_msgs::zed_raw>
+            ("zed/bodyAndobj", 10);
     ros::Rate rate(15.0);
 
     sl::Camera zed;
@@ -50,6 +53,8 @@ int main(int argc, char **argv)
     sl::float3 obj_coord;
     geometry_msgs::PoseStamped ObjPos;
     ObjPos.header.frame_id = "camera";
+    zedyolo_msgs::zed_raw BodyAndObj;
+    BodyAndObj.header.frame_id = "camera";
 
     zed.retrieveImage(left);
     zed.retrieveMeasure(cur_cloud, sl::MEASURE::XYZ);
@@ -77,19 +82,38 @@ int main(int argc, char **argv)
             auto result_vec_draw = getObjectDepth(result_vect, cur_cloud);
             auto objs_coord = get_3d_coords(result_vec_draw);
             data_lock.unlock();
+            // if(!objs_coord.empty()){
+            //     obj_coord = objs_coord.front();
+            //     auto cam_orient = data.imu.pose.getOrientation();
+            //     ObjPos.header.stamp = ros::Time::now();
+            //     ObjPos.pose.position.x = obj_coord.x;
+            //     ObjPos.pose.position.y = obj_coord.y;
+            //     ObjPos.pose.position.z = obj_coord.z;
+            //     ObjPos.pose.orientation.w = cam_orient.ow;
+            //     ObjPos.pose.orientation.x = cam_orient.ox;
+            //     ObjPos.pose.orientation.y = cam_orient.oy;
+            //     ObjPos.pose.orientation.z = cam_orient.oz;
+
+            //     obj_pos_pub.publish(ObjPos);
+            //     ROS_INFO("Object detected");
+            // }
             if(!objs_coord.empty()){
                 obj_coord = objs_coord.front();
                 auto cam_orient = data.imu.pose.getOrientation();
-                ObjPos.header.stamp = ros::Time::now();
-                ObjPos.pose.position.x = obj_coord.x;
-                ObjPos.pose.position.y = obj_coord.y;
-                ObjPos.pose.position.z = obj_coord.z;
-                ObjPos.pose.orientation.w = cam_orient.ow;
-                ObjPos.pose.orientation.x = cam_orient.ox;
-                ObjPos.pose.orientation.y = cam_orient.oy;
-                ObjPos.pose.orientation.z = cam_orient.oz;
+                BodyAndObj.header.stamp = ros::Time::now();
+                BodyAndObj.object_position.x = obj_coord.x;
+                BodyAndObj.object_position.y = obj_coord.y;
+                BodyAndObj.object_position.z = obj_coord.z;
 
-                obj_pos_pub.publish(ObjPos);
+                BodyAndObj.body_pose.position.x = 0;
+                BodyAndObj.body_pose.position.x = 0;
+                BodyAndObj.body_pose.position.x = 0;
+                BodyAndObj.body_pose.orientation.w = cam_orient.ow;
+                BodyAndObj.body_pose.orientation.x = cam_orient.ox;
+                BodyAndObj.body_pose.orientation.y = cam_orient.oy;
+                BodyAndObj.body_pose.orientation.z = cam_orient.oz;
+                
+                bodyAndobj_pos_pub.publish(BodyAndObj);
                 ROS_INFO("Object detected");
             }
             else{

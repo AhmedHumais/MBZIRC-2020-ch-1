@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_ros
   tf2_geometry_msgs
   mavros_msgs
+  zedyolo_msgs
 )
 
 find_package(ZED 2 QUIET)
