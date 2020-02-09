@@ -39,6 +39,7 @@ class PID
         double calculate( double setpoint, double pv );
         double calculate2( double err );
         void reset();
+        void change_P(float K_p);
         ~PID();
 
     private:

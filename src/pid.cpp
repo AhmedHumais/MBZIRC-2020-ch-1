@@ -36,6 +36,7 @@ class PIDImpl
         ~PIDImpl();
         double calculate( double error);
         void reset();
+        void change_P_gain(float K);
     private:
         double _dt;
         double _max;
@@ -63,6 +64,9 @@ double PID::calculate2( double err )
 void PID::reset()
 {
     pimpl->reset();
+}
+void PID::change_P(float K_p){
+    pimpl->change_P_gain(K_p);
 }
 
 PID::~PID() 
@@ -126,6 +130,10 @@ double PIDImpl::calculate( double error)
 void PIDImpl::reset(){
     _pre_error = 0;
     _integral = 0;
+}
+
+void PIDImpl::change_P_gain(float K){
+    _Kp = K;
 }
 
 PIDImpl::~PIDImpl()

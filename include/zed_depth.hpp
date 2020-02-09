@@ -78,6 +78,29 @@ std::vector<bbox_t_3d> getObjectDepth(std::vector<bbox_t> &bbox_vect, sl::Mat &x
     return bbox3d_vect;
 }
 
+bbox_t get_largest_bb(std::vector<bbox_t> &bbox_vect){
+    float largest;
+    int i = 0;
+    bbox_t BB;
+    for (auto &it : bbox_vect) {
+
+        float center_i = it.x + it.w * 0.5f, center_j = it.y + it.h * 0.5f;
+        float area = it.w*it.h;
+        if (i==0){
+            i++;
+            largest = area;
+            BB = it;
+        }
+        else{
+            if (largest < area){
+                largest = area;
+                BB = it;
+            }
+        }
+    }
+    return BB;
+}
+
 std::vector<sl::float3> get_3d_coords(std::vector<bbox_t_3d> result_vec){
     std::vector<sl::float3> obj_coords;
     for (auto &i : result_vec) {
