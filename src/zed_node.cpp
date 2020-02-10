@@ -15,8 +15,8 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "zed_objdetect_node");
     ros::NodeHandle nh;
 
-    std::string cfg_file = "/home/ahmed/trained-nets/balloon/balloon_tiny_30jan.cfg";
-    std::string weights_file = "/home/ahmed/trained-nets/balloon/balloon_tiny_30jan_final.weights";
+    std::string cfg_file = "/home/badboy/trained-nets/balloon/balloon_tiny_30jan.cfg";
+    std::string weights_file = "/home/badboy/trained-nets/balloon/balloon_tiny_30jan_final.weights";
 
     ros::Publisher obj_pos_pub = nh.advertise<geometry_msgs::PointStamped>
             ("zed/objpos", 10);
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
     sl::InitParameters init_params;
     sl::SensorsData data;
     init_params.camera_resolution = sl::RESOLUTION::HD720;
- //   init_params.camera_fps = 15;
+    init_params.camera_fps = 15;
     init_params.coordinate_units = sl::UNIT::METER;
     init_params.depth_minimum_distance = 0.2;
     init_params.depth_maximum_distance = 20;
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
     new_data = false;
 
     std::thread detect_thread(detectorThread, cfg_file, weights_file, thresh);
-    sl::sleep_ms(1000);
+    sl::sleep_ms(5000);
     while (ros::ok() && (!exit_flag)) {
 
         if (zed.grab() == sl::ERROR_CODE::SUCCESS) {
