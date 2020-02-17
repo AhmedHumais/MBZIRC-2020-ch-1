@@ -35,11 +35,7 @@ include_directories(${OPENCV_INCLUDE_DIRS})
 
 link_directories(${ZED_LIBRARY_DIR})
 link_directories(${CUDA_LIBRARY_DIRS})
-<<<<<<< HEAD
 link_directories(~/darknet/build-release)
-=======
-link_directories(/home/badboy/darknet/build-release)
->>>>>>> 65b5d627dfad855c1be5c55edeef47e8d441e2c2
 link_directories(${OpenCV_LIBRARY_DIRS})
 
 add_executable(ardu_offb_node src/ardu_offb_node.cpp)
