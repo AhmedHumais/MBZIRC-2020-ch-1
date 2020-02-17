@@ -250,7 +250,7 @@ int main(int argc, char **argv)
             while((ros::Time::now() - last_det) < ros::Duration(2)){
                 float x = target_pos.x;
                 float y = target_pos.y;
-                float y_ang = atan2(target_pos.y, target_pos.x);
+                float y_ang = atan2(y, x);
                 if ((abs(x) + abs(y)) < 3){
                     pop_balloon(local_pos_pub);
                 }

@@ -10,7 +10,6 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_ros
   tf2_geometry_msgs
   mavros_msgs
-  zedyolo_msgs
 )
 
 find_package(ZED 2 QUIET)
@@ -36,7 +35,7 @@ include_directories(${OPENCV_INCLUDE_DIRS})
 
 link_directories(${ZED_LIBRARY_DIR})
 link_directories(${CUDA_LIBRARY_DIRS})
-link_directories(/home/ahmed/darknet/build-release)
+link_directories(~/darknet/build-release)
 link_directories(${OpenCV_LIBRARY_DIRS})
 
 add_executable(ardu_offb_node src/ardu_offb_node.cpp)
@@ -55,6 +54,15 @@ target_link_libraries(bodytf  ${catkin_LIBRARIES} )
 
 add_executable(zed_node src/zed_node.cpp)
 target_link_libraries(zed_node 
+                        ${catkin_LIBRARIES}
+                        ${ZED_LIBRARIES}
+                        ${OpenCV_LIBRARIES}
+                        libdark.so
+                        ${CUDA_LIBRARIES})
+
+
+add_executable(zed_detect_node src/zed_only_detect_node.cpp)
+target_link_libraries(zed_detect_node 
                         ${catkin_LIBRARIES}
                         ${ZED_LIBRARIES}
                         ${OpenCV_LIBRARIES}
