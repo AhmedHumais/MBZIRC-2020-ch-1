@@ -11,11 +11,11 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_geometry_msgs
   mavros_msgs
 )
+SET(mavros_msgs_DIR ~/catkin_ws/build/mavros_msgs/catkin_generated/installspace/)
 
 find_package(ZED 2 QUIET)
 find_package(CUDA ${ZED_CUDA_VERSION} EXACT REQUIRED)
 find_package(OpenCV REQUIRED)
-
 
 catkin_package(
 #  INCLUDE_DIRS include
