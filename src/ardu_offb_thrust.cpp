@@ -84,8 +84,8 @@ bool pop_balloon(const ros::Publisher &pos_pub){
     Tar_Pos.coordinate_frame= Tar_Pos.FRAME_BODY_OFFSET_NED;
     Tar_Pos.type_mask = 0b010111000111;
     Tar_Pos.yaw_rate = 0.0;
-    pid_Vy.change_P(0.3);
-    while((ros::Time::now() - last_det) < ros::Duration(7)){
+    pid_Vy.change_P(0.2);
+    while((ros::Time::now() - last_det) < ros::Duration(10)){
         if (detect_flag && target_pos.y < 5){
             Tar_Pos.velocity.x = pid_Vx.calculate2(target_pos.x);
             Tar_Pos.velocity.y = pid_Vy.calculate2(target_pos.y);
@@ -102,7 +102,7 @@ bool pop_balloon(const ros::Publisher &pos_pub){
         if(target_pos.y > 5){
             ros::Time err_time = ros::Time::now();
            while(target_pos.y > 5){
-               if (ros::Time::now() - err_time > ros::Duration(3)){
+               if (ros::Time::now() - err_time > ros::Duration(4)){
                    return false;
                }
                detect_flag = false;
@@ -110,9 +110,9 @@ bool pop_balloon(const ros::Publisher &pos_pub){
                ros::spinOnce();
            }
         }
-        if ((ros::Time::now() - last_det) > ros::Duration(2)){
+        if ((ros::Time::now() - last_det) > ros::Duration(4)){
             Tar_Pos.velocity.x = 0;
-            Tar_Pos.velocity.y = -0.2;
+            Tar_Pos.velocity.y = -0.3;
             Tar_Pos.velocity.z = 0;
             pos_pub.publish(Tar_Pos);
         }
@@ -255,7 +255,7 @@ int main(int argc, char **argv)
                     pop_balloon(local_pos_pub);
                 }
                 else{
-                    if ( abs(angles::to_degrees(y_ang) - 90) < 5 ){
+                    if ( abs(angles::to_degrees(y_ang) - 90) < 10 ){
                         Vel.y = pid_Vy.calculate2(y);                                
                     }
                     else {                        

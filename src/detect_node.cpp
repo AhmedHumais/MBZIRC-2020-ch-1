@@ -15,8 +15,8 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "detect_node");
     ros::NodeHandle nh;
 
-    std::string cfg_file = "/home/ahmed/trained-nets/balloon/balloon_tiny_30jan.cfg";
-    std::string weights_file = "/home/ahmed/trained-nets/balloon/balloon_tiny_30jan_final.weights";
+    std::string cfg_file = "/home/badboy/trained-nets/balloon/balloon_tiny_30jan.cfg";
+    std::string weights_file = "/home/badboy/trained-nets/balloon/balloon_tiny_30jan_final.weights";
 
     ros::Publisher obj_pos_pub = nh.advertise<geometry_msgs::PointStamped>
             ("cam/objpos", 10);
